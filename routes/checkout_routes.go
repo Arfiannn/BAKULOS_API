@@ -140,4 +140,9 @@ func Checkout(router *gin.Engine, db *gorm.DB) {
 			},
 		})
 	})
+
+	router.DELETE("/checkout/:id", func(c *gin.Context) {
+		db.Delete(&models.Checkout{}, "id_checkout = ?", c.Param("id"))
+		c.JSON(http.StatusOK, gin.H{"message": "Checkout deleted"})
+	})
 }
