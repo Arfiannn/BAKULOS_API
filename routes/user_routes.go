@@ -41,5 +41,20 @@ func User(router *gin.Engine, db *gorm.DB) {
 		})
 	})
 
+	router.POST("/user", func(c *gin.Context) {
+		var user models.User
+		if err := c.ShouldBindJSON(&user); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		db.Create(&user)
+		c.JSON(http.StatusCreated, gin.H{
+			"data": gin.H{
+				"id_user": user.IDUser,
+				"nama":    user.Nama,
+				"email":   user.Email,
+			},
+		})
+	})
 	
 }
