@@ -54,7 +54,30 @@ func Keranjang(router *gin.Engine, db *gorm.DB) {
 			},
 		})
 	})
+	
+	router.POST("/keranjang", func(c *gin.Context) {
+		var keranjang models.Keranjang
+		if err := c.ShouldBindJSON(&keranjang); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		db.Create(&keranjang)
 
+		c.JSON(http.StatusCreated, gin.H{
+			"data": gin.H{
+				"id_keranjang": keranjang.IDKeranjang,
+				"id_product":   keranjang.IDProduct,
+				"id_user":      keranjang.IDUser,
+				"jumlah":       keranjang.Jumlah,
+				"product":      keranjang.Product,
+
+				"user": gin.H{
+					"id_user": keranjang.User.IDUser,
+					"nama":    keranjang.User.Nama,
+				},
+			},
+		})
+	})
 }
 
 
