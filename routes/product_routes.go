@@ -83,5 +83,8 @@ func Product(router *gin.Engine, db *gorm.DB) {
 	c.JSON(http.StatusOK, gin.H{"data": product})
 })
 
-
+	router.DELETE("/product/:id", func(c *gin.Context) {
+	db.Delete(&models.Product{}, "id_product = ?", c.Param("id"))
+	c.JSON(http.StatusOK, gin.H{"message": "Product deleted"})
+})
 }
