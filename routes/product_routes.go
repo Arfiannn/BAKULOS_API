@@ -66,6 +66,11 @@ func Product(router *gin.Engine, db *gorm.DB) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
+	db.Create(&product)
+	db.Create(&models.Search{
+		IDProduct: product.IDProduct,
+	})
+
 	c.JSON(http.StatusCreated, gin.H{"data": product})
 })
 
