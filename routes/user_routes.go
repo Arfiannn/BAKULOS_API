@@ -26,5 +26,20 @@ func User(router *gin.Engine, db *gorm.DB) {
 		c.JSON(http.StatusOK, gin.H{"data": result})
 	})
 
+	router.GET("/user/:id", func(c *gin.Context) {
+		var user models.User
+		if err := db.First(&user, "id_user = ?", c.Param("id")).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"data": gin.H{
+				"id_user": user.IDUser,
+				"nama":    user.Nama,
+				"email":   user.Email,
+			},
+		})
+	})
+
 	
 }
