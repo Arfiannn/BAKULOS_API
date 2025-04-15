@@ -84,4 +84,8 @@ func User(router *gin.Engine, db *gorm.DB) {
 		})
 	})
 	
+	router.DELETE("/user/:id", func(c *gin.Context) {
+		db.Delete(&models.User{}, "id_user = ?", c.Param("id"))
+		c.JSON(http.StatusOK, gin.H{"message": "User deleted"})
+	})
 }
