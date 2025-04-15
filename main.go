@@ -26,6 +26,7 @@ func main() {
 	routes.User(router, db)
 	routes.Penjual(router, db)
 	routes.Product(router, db)
+	routes.Keranjang(router, db)
 
 	router.Run(":3000")
 }
