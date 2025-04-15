@@ -24,4 +24,18 @@ func Penjual(router *gin.Engine, db *gorm.DB) {
 		c.JSON(http.StatusOK, gin.H{"data": result})
 	})
 
+	router.GET("/penjual/:id", func(c *gin.Context) {
+		var penjual models.Penjual
+		if err := db.First(&penjual, "id_penjual = ?", c.Param("id")).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Penjual not found"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"data": gin.H{
+				"id_penjual": penjual.IDPenjual,
+				"nama":       penjual.Nama,
+				"email":      penjual.Email,
+			},
+		})
+	})
 }
