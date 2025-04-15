@@ -10,7 +10,7 @@ import (
 
 func Product(router *gin.Engine, db *gorm.DB) {
 	// GET semua produk
-	router.GET("/product", func(c *gin.Context) {
+   router.GET("/product", func(c *gin.Context) {
 	var product []models.Product
 	db.Preload("Penjual").Find(&product)
 	var result []gin.H
@@ -32,6 +32,7 @@ func Product(router *gin.Engine, db *gorm.DB) {
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{"data": result})
-})
+  })
+
 
 }
