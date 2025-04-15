@@ -36,5 +36,31 @@ func Checkout(router *gin.Engine, db *gorm.DB) {
 
 		c.JSON(http.StatusOK, gin.H{"data": result})
 	})
+	
 
+	router.GET("/checkout/:id", func(c *gin.Context) {
+		var checkout models.Checkout
+		if err := db.Preload("User").Preload("Product").First(&checkout, "id_checkout = ?", c.Param("id")).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Checkout not found"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"data": gin.H{
+				"id_checkout":       checkout.IDCheckout,
+				"id_user":           checkout.IDUser,
+				"id_product":        checkout.IDProduct,
+				"id_keranjang":      checkout.IDKeranjang,
+				"alamat":            checkout.Alamat,
+				"metode_pengiriman": checkout.MetodePengiriman,
+				"pembayaran":        checkout.Pembayaran,
+				"jumlah":            checkout.Jumlah,
+
+				"user": gin.H{
+					"id_user": checkout.User.IDUser,
+					"nama":    checkout.User.Nama,
+				},
+				"product": checkout.Product,
+			},
+		})
+	})
 }
