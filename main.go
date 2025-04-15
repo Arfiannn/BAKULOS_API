@@ -19,6 +19,9 @@ func main() {
 	}
 
 	db.AutoMigrate(&models.User{}, &models.Penjual{})
+	db.AutoMigrate(&models.Product{})
+	db.AutoMigrate(&models.Keranjang{})
+	db.AutoMigrate(&models.Search{})
 
 	router := gin.Default()
 
