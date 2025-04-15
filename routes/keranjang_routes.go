@@ -62,6 +62,7 @@ func Keranjang(router *gin.Engine, db *gorm.DB) {
 			return
 		}
 		db.Create(&keranjang)
+		db.Preload("Product").Preload("User").First(&keranjang, keranjang.IDKeranjang)
 
 		c.JSON(http.StatusCreated, gin.H{
 			"data": gin.H{
