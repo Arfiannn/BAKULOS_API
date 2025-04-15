@@ -60,6 +60,16 @@ func Product(router *gin.Engine, db *gorm.DB) {
 	})
 })
 
+  // POST 
+  router.POST("/product", func(c *gin.Context) {
+	var product models.Product
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": product})
+})
+
 
 
 }
