@@ -105,6 +105,10 @@ func Keranjang(router *gin.Engine, db *gorm.DB) {
 			},
 		})
 	})
+	router.DELETE("/keranjang/:id", func(c *gin.Context) {
+		db.Delete(&models.Keranjang{}, "id_keranjang = ?", c.Param("id"))
+		c.JSON(http.StatusOK, gin.H{"message": "Keranjang deleted"})
+	})
 }
 
 
