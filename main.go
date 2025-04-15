@@ -25,6 +25,7 @@ func main() {
 	// Registrasi routes
 	routes.User(router, db)
 	routes.Penjual(router, db)
+	routes.Product(router, db)
 
 	router.Run(":3000")
 }
