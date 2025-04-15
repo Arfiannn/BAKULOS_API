@@ -85,6 +85,12 @@ func Checkout(router *gin.Engine, db *gorm.DB) {
 			return
 		}
 
+		history := models.History{
+			IDUser:     checkout.IDUser,
+			IDCheckout: checkout.IDCheckout,
+		}
+		db.Create(&history)
+
 		db.Preload("User").Preload("Product").First(&checkout, checkout.IDCheckout)
 		c.JSON(http.StatusCreated, gin.H{
 			"message": "Checkout dari keranjang berhasil",
@@ -119,6 +125,12 @@ func Checkout(router *gin.Engine, db *gorm.DB) {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menyimpan data checkout"})
 			return
 		}
+
+		history := models.History{
+			IDUser:     checkout.IDUser,
+			IDCheckout: checkout.IDCheckout,
+		}
+		db.Create(&history)
 
 		db.Preload("User").Preload("Product").First(&checkout, checkout.IDCheckout)
 		c.JSON(http.StatusCreated, gin.H{
