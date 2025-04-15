@@ -34,5 +34,32 @@ func Product(router *gin.Engine, db *gorm.DB) {
 	c.JSON(http.StatusOK, gin.H{"data": result})
   })
 
+  router.GET("/product/:id", func(c *gin.Context) {
+	var product models.Product
+	if err := db.Preload("Penjual").First(&product, "id_product = ?", c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Product not found"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": gin.H{
+			"id_product": product.IDProduct,
+			"id_penjual": product.IDPenjual,
+			"kategori":   product.Kategori,
+			"size":       product.Size,
+			"deskripsi":  product.Deskripsi,
+			"brand":      product.Brand,
+			"price":      product.Price,
+			"image":      product.Image,
+			"warna":      product.Warna,
+			
+			"penjual": gin.H{
+				"id_penjual": product.Penjual.IDPenjual,
+				"nama":       product.Penjual.Nama,
+			},
+		},
+	})
+})
+
+
 
 }
