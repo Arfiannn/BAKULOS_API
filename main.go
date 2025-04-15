@@ -31,6 +31,7 @@ func main() {
 	routes.Product(router, db)
 	routes.Keranjang(router, db)
 	routes.Search(router, db)
+	routes.Checkout(router, db)
 
 	router.Run(":3000")
 }
