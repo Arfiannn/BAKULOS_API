@@ -18,12 +18,13 @@ func main() {
 		return
 	}
 
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.User{}, &models.Penjual{})
 
 	router := gin.Default()
 
 	// Registrasi routes
 	routes.User(router, db)
+	routes.Penjual(router, db)
 
 	router.Run(":3000")
 }
