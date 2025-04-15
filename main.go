@@ -23,10 +23,10 @@ func main() {
 	db.AutoMigrate(&models.Keranjang{})
 	db.AutoMigrate(&models.Search{})
 	db.AutoMigrate(&models.Checkout{}, &models.History{})
+	db.AutoMigrate(&models.Favorite{})
 
 	router := gin.Default()
 
-	// Registrasi routes
 	routes.User(router, db)
 	routes.Penjual(router, db)
 	routes.Product(router, db)
@@ -34,6 +34,7 @@ func main() {
 	routes.Search(router, db)
 	routes.Checkout(router, db)
 	routes.History(router, db)
+	routes.Favorite(router, db)
 
 	router.Run(":3000")
 }
