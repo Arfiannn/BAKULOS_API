@@ -54,4 +54,31 @@ func Penjual(router *gin.Engine, db *gorm.DB) {
 			},
 		})
 	})
+
+	router.PUT("/penjual/:id", func(c *gin.Context) {
+		var penjual models.Penjual
+		if err := db.First(&penjual, "id_penjual = ?", c.Param("id")).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"message": "Penjual not found"})
+			return
+		}
+
+		var input models.Penjual
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+
+		db.Model(&penjual).Updates(models.Penjual{
+			Nama:     input.Nama,
+			Password: input.Password,
+		})
+
+		c.JSON(http.StatusOK, gin.H{
+			"data": gin.H{
+				"id_penjual": penjual.IDPenjual,
+				"nama":       penjual.Nama,
+				"email":      penjual.Email,
+			},
+		})
+	})
 }
