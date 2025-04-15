@@ -9,7 +9,7 @@ import (
 )
 
 func Product(router *gin.Engine, db *gorm.DB) {
-	// GET semua produk
+	
    router.GET("/product", func(c *gin.Context) {
 	var product []models.Product
 	db.Preload("Penjual").Find(&product)
@@ -59,8 +59,7 @@ func Product(router *gin.Engine, db *gorm.DB) {
 		},
 	})
 })
-
-  // POST 
+ 
   router.POST("/product", func(c *gin.Context) {
 	var product models.Product
 	if err := c.ShouldBindJSON(&product); err != nil {
@@ -70,6 +69,19 @@ func Product(router *gin.Engine, db *gorm.DB) {
 	c.JSON(http.StatusCreated, gin.H{"data": product})
 })
 
+  router.PUT("/product/:id", func(c *gin.Context) {
+	var product models.Product
+	if err := db.First(&product, "id_product = ?", c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Product not found"})
+		return
+	}
+	if err := c.ShouldBindJSON(&product); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	db.Save(&product)
+	c.JSON(http.StatusOK, gin.H{"data": product})
+})
 
 
 }
