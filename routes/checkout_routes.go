@@ -106,4 +106,38 @@ func Checkout(router *gin.Engine, db *gorm.DB) {
 			},
 		})
 	})
+
+	router.POST("/checkout/direct", func(c *gin.Context) {
+		var checkout models.Checkout
+		if err := c.ShouldBindJSON(&checkout); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		var kosong *uint = nil
+		checkout.IDKeranjang = kosong
+		if err := db.Create(&checkout).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menyimpan data checkout"})
+			return
+		}
+
+		db.Preload("User").Preload("Product").First(&checkout, checkout.IDCheckout)
+		c.JSON(http.StatusCreated, gin.H{
+			"message": "Checkout langsung berhasil",
+			"data": gin.H{
+				"id_checkout":       checkout.IDCheckout,
+				"id_user":           checkout.IDUser,
+				"id_product":        checkout.IDProduct,
+				"id_keranjang":      checkout.IDKeranjang,
+				"alamat":            checkout.Alamat,
+				"metode_pengiriman": checkout.MetodePengiriman,
+				"pembayaran":        checkout.Pembayaran,
+				"jumlah":            checkout.Jumlah,
+				"user": gin.H{
+					"id_user": checkout.User.IDUser,
+					"nama":    checkout.User.Nama,
+				},
+				"product": checkout.Product,
+			},
+		})
+	})
 }
