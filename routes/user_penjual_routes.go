@@ -38,4 +38,20 @@ func Penjual(router *gin.Engine, db *gorm.DB) {
 			},
 		})
 	})
+
+	router.POST("/penjual", func(c *gin.Context) {
+		var penjual models.Penjual
+		if err := c.ShouldBindJSON(&penjual); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+		db.Create(&penjual)
+		c.JSON(http.StatusCreated, gin.H{
+			"data": gin.H{
+				"id_penjual": penjual.IDPenjual,
+				"nama":       penjual.Nama,
+				"email":      penjual.Email,
+			},
+		})
+	})
 }
