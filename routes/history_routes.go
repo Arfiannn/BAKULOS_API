@@ -86,4 +86,12 @@ func History(router *gin.Engine, db *gorm.DB) {
 		c.JSON(http.StatusOK, gin.H{"data": result})
 	})
 
+	router.DELETE("/history/:id", func(c *gin.Context) {
+		if err := db.Delete(&models.History{}, "id_history = ?", c.Param("id")).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Gagal menghapus data"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "Data history berhasil dihapus"})
+	})
+
 }
